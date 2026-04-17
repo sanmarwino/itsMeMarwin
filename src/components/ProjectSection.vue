@@ -1,8 +1,8 @@
 <template>
   <!-- Projects -->
-  <section class="tw-text-white tw-mt-20 tw-relative tw-overflow-hidden" id="projects">
+  <section class="tw-text-white tw-mt-20 tw-relative" id="projects">
     <!-- Glow -->
-    <div class="tw-absolute tw-right-0 tw-top-10 tw-w-full tw-pointer-events-none floating-blur">
+    <div class="tw-absolute tw-right-0 tw-top-10 tw-w-full tw-pointer-events-none">
       <span class="tw-flex tw-justify-end tw-opacity-20">
         <span class="tw-w-20 tw-h-32 tw-rounded-l-full tw-bg-primary tw-blur-3xl"></span>
         <span class="tw-w-20 tw-h-32 tw-rounded-r-full tw-bg-[#f88fc2] tw-blur-3xl tw-mt-12"></span>
@@ -13,11 +13,11 @@
       <!-- Main Card -->
       <v-card
         elevation="0"
-        class="tw-rounded-2xl tw-bg-[#21201d] tw-backdrop-blur-md tw-border tw-border-white/10 tw-transition-all tw-duration-500 hover:tw-border-white hover:tw-shadow-xl hover:tw--translate-y-1 card-glow"
+        class="tw-rounded-2xl tw-bg-[#21201d] tw-backdrop-blur-md tw-border tw-border-white/10 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-shadow-xl"
       >
         <div class="tw-p-6">
           <!-- Title -->
-          <h2 class="tw-text-2xl tw-font-bold tw-pb-6 title-animate">
+          <h2 class="tw-text-2xl tw-font-bold tw-pb-6">
             <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-primary tw-to-secondary">
               Projects
             </span>
@@ -26,10 +26,9 @@
           <!-- Grid -->
           <div class="tw-grid sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6">
             <div
-              v-for="(project, index) in filteredProjects"
+              v-for="project in filteredProjects"
               :key="project.id"
-              class="tw-rounded-2xl tw-overflow-hidden tw-border tw-border-white/10 tw-bg-white/5 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-shadow-xl hover:tw-bg-white/10 hover:tw--translate-y-2 pop-item"
-              :style="{ animationDelay: `${index * 0.1}s` }"
+              class="tw-rounded-2xl tw-overflow-hidden tw-border tw-border-white/10 tw-bg-white/5 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-shadow-xl hover:tw-bg-white/10"
             >
               <!-- Image -->
               <div class="tw-relative tw-h-52 tw-overflow-hidden">
@@ -38,6 +37,18 @@
                   :alt="project.title"
                   class="tw-w-full tw-h-full tw-object-cover tw-transition-all tw-duration-500 hover:tw-scale-110"
                 />
+
+                <!-- <div
+                  class="tw-absolute tw-inset-0 tw-bg-black/40 tw-flex tw-items-center tw-justify-center tw-opacity-0 hover:tw-opacity-100 tw-transition-all tw-duration-300"
+                >
+                  <a
+                    :href="project.webURL"
+                    target="_blank"
+                    class="tw-bg-white tw-text-black tw-px-4 tw-py-2 tw-rounded-xl tw-font-semibold"
+                  >
+                    View Project
+                  </a>
+                </div> -->
               </div>
 
               <!-- Content -->
@@ -57,7 +68,7 @@
                   <span
                     v-for="technology in project.technologies"
                     :key="technology"
-                    class="tw-px-3 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-white/10 tw-border tw-border-white/10 tech-badge"
+                    class="tw-px-3 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-bg-white/10 tw-border tw-border-white/10"
                   >
                     {{ technology }}
                   </span>
@@ -150,82 +161,3 @@ const filteredProjects = computed(() => {
   return Projects.value.filter((project) => project.category.toLowerCase() === selectedCategory.value.toLowerCase());
 });
 </script>
-
-<style scoped>
-/* POP-UP cards */
-.pop-item {
-  opacity: 0;
-  transform: translateY(30px) scale(0.9);
-  animation: popUpCard 0.7s ease forwards;
-}
-
-/* Title */
-.title-animate {
-  animation: slideFade 0.8s ease;
-}
-
-/* Floating glow */
-.floating-blur {
-  animation: floatBlur 6s ease-in-out infinite;
-}
-
-/* Main card glow */
-.card-glow {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-glow::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  /* background: linear-gradient(135deg, rgba(255, 215, 72, 0.15), rgba(248, 143, 194, 0.1)); */
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  border-radius: 1rem;
-  pointer-events: none;
-}
-
-.card-glow:hover::before {
-  opacity: 1;
-}
-
-/* Tech badges */
-.tech-badge {
-  transition: all 0.3s ease;
-}
-
-.tech-badge:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Animations */
-@keyframes popUpCard {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes slideFade {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes floatBlur {
-  0%,
-  100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  50% {
-    transform: translateY(-10px) translateX(-5px);
-  }
-}
-</style>
