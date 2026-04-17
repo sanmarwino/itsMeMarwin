@@ -1,81 +1,95 @@
 <template>
-    <section class="text-white mt-20" id="contact">
-        <h2 class="text-4xl font-bold text-white text-left mb-4 px-4 xl:pl-16">Let's Connect</h2>
-        <div class="grid md:grid-cols-2 gap-4 relative px-4 xl:px-16 mt-8" data-aos="zoom-in-up">
-            <div>
-                <!-- <p class="text-[#adb7be]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta alias
-                    quibusdam officia at,
-                    a quis cumque ea aperiam omnis minima quam. Modi necessitatibus odit corporis at dolorem quae iusto
-                    aliquam?
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, porro!
-                </p> -->
-                <div class="col-lg-4 col-md-4 mb-lg-0 mt-5">
-                    <div class="flex mb-10 items-center">
-                        <div class="p-2"
-                            style="background: #111a3e; width: 50px;height: 46px; display: flex;justify-content: center; border-radius: 50%;
-                        overflow: hidden;border: 1px solid#111a3e;backdrop-filter: blur(9px);-webkit-backdrop-filter: blur(9px);">
-                            <img src="https://img.icons8.com/metro/50/ffffff/new-post.png" alt="new-post" class="w-6">
-                        </div>
-                        <div class="ml-5 text-white">
-                            <h4>Email</h4>
-                            <p>marwinmedado@gmail.com</p>
-                        </div>
-                    </div>
-                    <div class="flex mb-10 items-center">
-                        <div class="p-2"
-                            style="background: #111a3e; width: 50px;height: 46px; display: flex;justify-content: center; border-radius: 50%;
-                        overflow: hidden;border: 1px solid#111a3e;backdrop-filter: blur(9px);-webkit-backdrop-filter: blur(9px);">
-                            <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="phone" class="w-6">
-                        </div>
-                        <div class="ml-5 text-white">
-                            <h4>Phone</h4>
-                            <p>(+63) 9052633768</p>
-                        </div>
-                    </div>
-                    <div class="flex mb-10 items-center">
-                        <div class="p-2"
-                            style="background: #111a3e; width: 50px;height: 46px; display: flex;justify-content: center; border-radius: 50%;
-                        overflow: hidden;border: 1px solid#111a3e;backdrop-filter: blur(9px);-webkit-backdrop-filter: blur(9px);">
-                            <img src="https://img.icons8.com/ios-filled/50/ffffff/linkedin.png" alt="linkedin"
-                                class="w-6">
-                        </div>
-                        <div class="ml-5 text-white">
-                            <h4>LinkedIn</h4>
-                            <a>https://www.linkedin.com/in/marwin-medado-53297a306</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- <div
-            style="background: #111a3e; width: 100%;height: 100%; border-radius: 20px;
-            overflow: hidden;border: 1px solid #111a3e;backdrop-filter: blur(9px);-webkit-backdrop-filter: blur(9px);">
-            <form class="flex flex-col p-2" data-aos="zoom-in-up" >
-                <div class="mb-6">
-                    <label for="email" class="text-white block mb-2 text-sm font-medium">email</label>
-                    <input type="email" id="email" class="bg-[#111827] placeholder:[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
-                    placeholder="email@gmail.com" name="email">
-                </div>
-                <div class="mb-6">
-                    <label for="subject" class="text-white block mb-2 text-sm font-medium">Subject</label>
-                    <input type="subject" id="subject" class="bg-[#111827] placeholder:[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
-                    placeholder="subject" name="subject">
-                </div>
-                <div class="mb-6">
-                    <label for="message" class="text-white block mb-2 text-sm font-medium">Message</label>
-                    <textarea id="Message" class="bg-[#111827] placeholder:[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
-                    placeholder="Let's talk about ... " name="Message"></textarea>
-                </div>
-                <button class="z-1 w-[100%!important] px-6 md:px-7 py-3 rounded-full sm:w-max flex justify-center text-white bg-primary border-2 border-transparent">
-                    Send Message
-                </button>
-            </form>
-        </div> -->
-        <div class="bg-gradient-to-tr opacity-25 from-[#570cac] to-primary blur-2xl h-20 w-80 z-0 absolute -top-1/2 -left-4 transform -translate-x-2/3 
-        -translate-1/2
-        "></div>
-        </div>
-    </section>
-</template>
-<script>
+  <!-- Contact -->
+  <section class="tw-text-white tw-mt-20 tw-relative" id="contact">
+    <!-- Glow -->
+    <div
+      class="tw-absolute tw-bg-gradient-to-tr tw-opacity-25 tw-from-[#570cac] tw-to-primary tw-blur-3xl tw-h-32 tw-w-96 tw-z-0 tw-top-0 tw-left-0"
+    ></div>
 
-</script>
+    <div class="tw-relative tw-z-10 tw-px-4 xl:tw-px-16 tw-py-8">
+      <!-- Main Card -->
+      <v-card
+        elevation="0"
+        class="tw-rounded-2xl tw-bg-[#21201d] tw-backdrop-blur-md tw-border tw-border-white/10 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-shadow-xl"
+      >
+        <div class="tw-p-6">
+          <!-- Title -->
+          <h2 class="tw-text-2xl tw-font-bold tw-pb-6">
+            <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-primary tw-to-secondary">
+              Let's Connect
+            </span>
+          </h2>
+
+          <!-- 3 Equal Cards -->
+          <div class="tw-grid md:tw-grid-cols-3 tw-gap-6">
+            <!-- Email -->
+            <div
+              class="tw-h-full tw-rounded-2xl tw-border tw-border-white/10 tw-bg-white/5 tw-p-5 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-bg-white/10"
+            >
+              <div class="tw-flex tw-flex-col tw-items-center tw-text-center tw-gap-4">
+                <div
+                  class="tw-w-14 tw-h-14 tw-rounded-2xl tw-bg-white tw-flex tw-items-center tw-justify-center tw-shadow-md"
+                >
+                  <img src="https://img.icons8.com/metro/50/000000/new-post.png" alt="email" class="tw-w-7 tw-h-7" />
+                </div>
+
+                <div>
+                  <h4 class="tw-font-bold tw-text-lg">Email</h4>
+                  <a href="mailto:marwinmedado@gmail.com" class="tw-text-gray-300 hover:tw-text-primary tw-break-all">
+                    marwinmedado@gmail.com
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div
+              class="tw-h-full tw-rounded-2xl tw-border tw-border-white/10 tw-bg-white/5 tw-p-5 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-bg-white/10"
+            >
+              <div class="tw-flex tw-flex-col tw-items-center tw-text-center tw-gap-4">
+                <div
+                  class="tw-w-14 tw-h-14 tw-rounded-2xl tw-bg-white tw-flex tw-items-center tw-justify-center tw-shadow-md"
+                >
+                  <img src="https://img.icons8.com/ios-filled/50/000000/phone.png" alt="phone" class="tw-w-7 tw-h-7" />
+                </div>
+
+                <div>
+                  <h4 class="tw-font-bold tw-text-lg">Phone</h4>
+                  <a href="tel:+639052633768" class="tw-text-gray-300 hover:tw-text-primary"> (+63) 9052633768 </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- LinkedIn -->
+            <div
+              class="tw-h-full tw-rounded-2xl tw-border tw-border-white/10 tw-bg-white/5 tw-p-5 tw-transition-all tw-duration-300 hover:tw-border-white hover:tw-bg-white/10"
+            >
+              <div class="tw-flex tw-flex-col tw-items-center tw-text-center tw-gap-4">
+                <div
+                  class="tw-w-14 tw-h-14 tw-rounded-2xl tw-bg-white tw-flex tw-items-center tw-justify-center tw-shadow-md"
+                >
+                  <img
+                    src="https://img.icons8.com/ios-filled/50/000000/linkedin.png"
+                    alt="linkedin"
+                    class="tw-w-7 tw-h-7"
+                  />
+                </div>
+
+                <div>
+                  <h4 class="tw-font-bold tw-text-lg">LinkedIn</h4>
+                  <a
+                    href="https://www.linkedin.com/in/marwin-medado-53297a306"
+                    target="_blank"
+                    class="tw-text-gray-300 hover:tw-text-primary tw-break-all"
+                  >
+                    linkedin.com/in/marwin-medado-53297a306
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-card>
+    </div>
+  </section>
+</template>
