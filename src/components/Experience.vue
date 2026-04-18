@@ -95,7 +95,7 @@ const Experiences = ref([
   },
   {
     id: 5,
-    role: "Debugger",
+    role: "Web Developer",
     company: "Cebu Institute of Technology University - CCS Department (OJT 1)",
     date: "Internship",
     logo: "./company/citu.png",
