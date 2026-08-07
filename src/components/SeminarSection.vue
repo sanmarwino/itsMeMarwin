@@ -130,6 +130,13 @@ const achievements = [
     date: "September 18, 2021",
     logo: "./achievements.png",
   },
+  {
+    id: 4,
+    title: "Certificate of Completion",
+    company: "Artificial Intelligence (AI) Course",
+    date: "August 1, 2026",
+    logo: "./achievements.png",
+  },
 ];
 
 const seminars = [

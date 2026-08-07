@@ -35,8 +35,8 @@
 
                 <div>
                   <h4 class="tw-font-bold tw-text-lg">Email</h4>
-                  <a href="mailto:marwinmedado@gmail.com" class="tw-text-gray-300 hover:tw-text-primary tw-break-all">
-                    marwinmedado@gmail.com
+                  <a href="mailto:marwinsk13@gmail.com" class="tw-text-gray-300 hover:tw-text-primary tw-break-all">
+                    marwinsk13@gmail.com
                   </a>
                 </div>
               </div>
