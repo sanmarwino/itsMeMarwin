@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import profileImage from "../assets/profile_pic.jpg";
 import profileImage2 from "../assets/profile_pic2.jpg";
 import profileImage3 from "../assets/profile_pic3.jpg";
+import profileImage4 from "../assets/profile_pic4.jpg";
 
 import About from "./About.vue";
 import Experience from "./Experience.vue";
@@ -110,10 +111,13 @@ onBeforeUnmount(() => {
           <!-- Profile Image -->
           <!-- Profile Hover Gallery -->
           <div class="mb-8 flex justify-center">
-            <figure class="hover-gallery profile-gallery">
+            <figure
+              class="hover-gallery profile-gallery overflow-hidden rounded-full border border-white/15 p-1 shadow-[0_0_50px_rgba(255,255,255,0.08)] transition-all duration-500 hover:border-white/30 hover:shadow-[0_0_70px_rgba(255,255,255,0.15)]"
+            >
               <img :src="profileImage" alt="Marwin Joseph" />
               <img :src="profileImage2" alt="Marwin Joseph" />
               <img :src="profileImage3" alt="Marwin Joseph" />
+              <img :src="profileImage4" alt="Marwin Joseph" />
             </figure>
           </div>
 
