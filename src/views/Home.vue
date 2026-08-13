@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+
 import profileImage from "../assets/profile_pic.jpg";
 import profileImage2 from "../assets/profile_pic2.jpg";
 import profileImage3 from "../assets/profile_pic3.jpg";
@@ -10,12 +11,36 @@ import Experience from "./Experience.vue";
 import Certifications from "./Certifications.vue";
 import HireMe from "./HireMe.vue";
 
+/*
+|--------------------------------------------------------------------------
+| Navigation
+|--------------------------------------------------------------------------
+*/
+
 const activeSection = ref("about");
+
+/*
+|--------------------------------------------------------------------------
+| Galaxy Mouse Glow
+|--------------------------------------------------------------------------
+*/
 
 const mouseX = ref(50);
 const mouseY = ref(50);
 
+/*
+|--------------------------------------------------------------------------
+| Go To Top
+|--------------------------------------------------------------------------
+*/
+
 const showGoTop = ref(false);
+
+/*
+|--------------------------------------------------------------------------
+| Section Navigation
+|--------------------------------------------------------------------------
+*/
 
 const showSection = (section) => {
   activeSection.value = section;
@@ -26,14 +51,33 @@ const showSection = (section) => {
   });
 };
 
+/*
+|--------------------------------------------------------------------------
+| Mouse Move
+|--------------------------------------------------------------------------
+*/
+
 const handleMouseMove = (event) => {
   mouseX.value = (event.clientX / window.innerWidth) * 100;
+
   mouseY.value = (event.clientY / window.innerHeight) * 100;
 };
+
+/*
+|--------------------------------------------------------------------------
+| Scroll
+|--------------------------------------------------------------------------
+*/
 
 const handleScroll = () => {
   showGoTop.value = window.scrollY > 400;
 };
+
+/*
+|--------------------------------------------------------------------------
+| Go To Top
+|--------------------------------------------------------------------------
+*/
 
 const goToTop = () => {
   window.scrollTo({
@@ -42,16 +86,316 @@ const goToTop = () => {
   });
 };
 
+/*
+|--------------------------------------------------------------------------
+| Shooting Stars
+|--------------------------------------------------------------------------
+|
+| We do NOT use CSS @keyframes for shooting stars.
+|
+| iOS Safari and Chrome on iOS use WebKit, and percentage-based
+| CSS animations can be unreliable when combined with fixed layers,
+| overflow, transforms and multiple GPU effects.
+|
+| requestAnimationFrame gives us direct control over the movement.
+|--------------------------------------------------------------------------
+*/
+
+const shootingStars = ref([]);
+
+let shootingAnimationFrame = null;
+let shootingLastTime = 0;
+
+/*
+|--------------------------------------------------------------------------
+| Shooting Star Configuration
+|--------------------------------------------------------------------------
+*/
+
+const shootingStarStates = [
+  {
+    element: null,
+
+    /*
+     * Progress through the cycle.
+     */
+    progress: 0,
+
+    /*
+     * Seconds before first appearance.
+     */
+    initialDelay: 0,
+
+    /*
+     * Current delay.
+     */
+    delay: 0,
+
+    /*
+     * Complete cycle duration.
+     */
+    cycle: 5.5,
+  },
+
+  {
+    element: null,
+    progress: 0,
+    initialDelay: 2.2,
+    delay: 2.2,
+    cycle: 5.5,
+  },
+
+  {
+    element: null,
+    progress: 0,
+    initialDelay: 4.1,
+    delay: 4.1,
+    cycle: 5.5,
+  },
+];
+
+/*
+|--------------------------------------------------------------------------
+| Initialize Shooting Stars
+|--------------------------------------------------------------------------
+*/
+
+const initializeShootingStars = () => {
+  shootingStars.value = Array.from(document.querySelectorAll(".shooting-star"));
+
+  shootingStarStates.forEach((state, index) => {
+    state.element = shootingStars.value[index] || null;
+
+    state.delay = state.initialDelay;
+
+    if (!state.element) {
+      return;
+    }
+
+    /*
+     * Initial hidden state.
+     */
+    state.element.style.opacity = "0";
+
+    state.element.style.transform = "translate3d(0, 0, 0) rotate(-35deg)";
+
+    /*
+     * Safari/WebKit uses the same transform property,
+     * but setting both is harmless and improves compatibility
+     * with older iOS versions.
+     */
+    state.element.style.webkitTransform = "translate3d(0, 0, 0) rotate(-35deg)";
+  });
+
+  shootingLastTime = 0;
+};
+
+/*
+|--------------------------------------------------------------------------
+| Animate Shooting Stars
+|--------------------------------------------------------------------------
+*/
+
+const animateShootingStars = (timestamp) => {
+  /*
+   * If the page is hidden, don't process animation.
+   */
+  if (document.hidden) {
+    shootingLastTime = timestamp;
+
+    shootingAnimationFrame = requestAnimationFrame(animateShootingStars);
+
+    return;
+  }
+
+  if (!shootingLastTime) {
+    shootingLastTime = timestamp;
+  }
+
+  /*
+   * Prevent large jumps when Safari temporarily pauses
+   * rendering or the browser switches tabs.
+   */
+  const delta = Math.min(timestamp - shootingLastTime, 50);
+
+  shootingLastTime = timestamp;
+
+  shootingStarStates.forEach((state) => {
+    if (!state.element) {
+      return;
+    }
+
+    /*
+     * Convert milliseconds to seconds.
+     */
+    const seconds = delta / 1000;
+
+    /*
+     * Countdown before each star starts.
+     */
+    if (state.delay > 0) {
+      state.delay -= seconds;
+
+      state.element.style.opacity = "0";
+
+      return;
+    }
+
+    /*
+     * Progress through shooting animation.
+     *
+     * 0 = starting position
+     * 1 = ending position
+     */
+    state.progress += seconds / state.cycle;
+
+    /*
+     * Restart.
+     */
+    if (state.progress >= 1) {
+      state.progress = 0;
+
+      /*
+       * Small random delay so all stars don't become
+       * perfectly synchronized.
+       */
+      state.delay = 0.8 + Math.random() * 2.5;
+
+      state.element.style.opacity = "0";
+
+      return;
+    }
+
+    const progress = state.progress;
+
+    /*
+     * Shooting happens during the first 22%
+     * of the cycle.
+     */
+    const shootingDuration = 0.22;
+
+    /*
+     * Not currently shooting.
+     */
+    if (progress >= shootingDuration) {
+      state.element.style.opacity = "0";
+
+      return;
+    }
+
+    /*
+     * Normalize the shooting progress from 0 to 1.
+     */
+    const p = progress / shootingDuration;
+
+    /*
+     * Ease movement slightly.
+     */
+    const eased = 1 - Math.pow(1 - p, 2);
+
+    /*
+     * Movement distance.
+     */
+    const x = -400 * eased;
+
+    const y = 250 * eased;
+
+    /*
+     * Fade in quickly and fade out near the end.
+     */
+    let opacity = 1;
+
+    if (p < 0.12) {
+      opacity = p / 0.12;
+    } else if (p > 0.72) {
+      opacity = 1 - (p - 0.72) / 0.28;
+    }
+
+    /*
+     * Make sure opacity stays between 0 and 1.
+     */
+    opacity = Math.max(0, Math.min(1, opacity));
+
+    const transform = `translate3d(${x}px, ${y}px, 0) rotate(-35deg)`;
+
+    state.element.style.opacity = String(opacity);
+
+    state.element.style.transform = transform;
+
+    state.element.style.webkitTransform = transform;
+  });
+
+  shootingAnimationFrame = requestAnimationFrame(animateShootingStars);
+};
+
+/*
+|--------------------------------------------------------------------------
+| Page Visibility
+|--------------------------------------------------------------------------
+*/
+
+const handleVisibilityChange = () => {
+  /*
+   * Reset timing when returning to the page.
+   */
+  shootingLastTime = 0;
+};
+
+/*
+|--------------------------------------------------------------------------
+| Lifecycle
+|--------------------------------------------------------------------------
+*/
+
 onMounted(() => {
+  /*
+   * Mouse glow.
+   */
   window.addEventListener("mousemove", handleMouseMove);
+
+  /*
+   * Go top button.
+   */
   window.addEventListener("scroll", handleScroll);
 
   handleScroll();
+
+  /*
+   * Shooting stars.
+   *
+   * Wait for the DOM to exist.
+   */
+  requestAnimationFrame(() => {
+    initializeShootingStars();
+
+    shootingAnimationFrame = requestAnimationFrame(animateShootingStars);
+  });
+
+  /*
+   * Reset animation timing when returning
+   * from another tab/app.
+   */
+  document.addEventListener("visibilitychange", handleVisibilityChange);
 });
 
 onBeforeUnmount(() => {
+  /*
+   * Remove listeners.
+   */
   window.removeEventListener("mousemove", handleMouseMove);
+
   window.removeEventListener("scroll", handleScroll);
+
+  document.removeEventListener("visibilitychange", handleVisibilityChange);
+
+  /*
+   * Stop animation frame.
+   */
+  if (shootingAnimationFrame) {
+    cancelAnimationFrame(shootingAnimationFrame);
+
+    shootingAnimationFrame = null;
+  }
 });
 </script>
 
@@ -76,15 +420,25 @@ onBeforeUnmount(() => {
 
       <!-- Nebula -->
       <div class="nebula nebula-one"></div>
+
       <div class="nebula nebula-two"></div>
+
       <div class="nebula nebula-three"></div>
 
-      <!-- Shooting Stars -->
+      <!-- ================================= -->
+      <!-- SHOOTING STARS -->
+      <!-- ================================= -->
+
       <div class="shooting-star shooting-star-1"></div>
+
       <div class="shooting-star shooting-star-2"></div>
+
       <div class="shooting-star shooting-star-3"></div>
 
-      <!-- Mouse Glow -->
+      <!-- ================================= -->
+      <!-- MOUSE GLOW -->
+      <!-- ================================= -->
+
       <div
         class="cosmic-cursor"
         :style="{
@@ -109,27 +463,33 @@ onBeforeUnmount(() => {
       <section class="flex items-center justify-center py-5 text-center">
         <div class="w-full max-w-3xl">
           <!-- Profile Image -->
-          <!-- Profile Hover Gallery -->
+
           <div class="mb-8 flex justify-center">
             <figure
               class="hover-gallery profile-gallery overflow-hidden rounded-full border border-white/15 p-1 shadow-[0_0_50px_rgba(255,255,255,0.08)] transition-all duration-500 hover:border-white/30 hover:shadow-[0_0_70px_rgba(255,255,255,0.15)]"
             >
               <img :src="profileImage" alt="Marwin Joseph" />
+
               <img :src="profileImage2" alt="Marwin Joseph" />
+
               <img :src="profileImage3" alt="Marwin Joseph" />
+
               <img :src="profileImage4" alt="Marwin Joseph" />
             </figure>
           </div>
 
           <!-- Greeting -->
+
           <p class="mb-4 text-xs font-medium uppercase tracking-[0.25em] text-gray-500 sm:text-sm">Hello, I'm</p>
 
           <!-- Name -->
+
           <h1 class="text-3xl font-bold tracking-[-0.04em] sm:text-6xl md:text-5xl lg:text-6xl">
             Marwin Joseph Medado
           </h1>
 
           <!-- Job -->
+
           <h2 class="mt-4 text-md font-medium text-gray-400 sm:text-2xl md:text-2xl">Front-End Web Developer</h2>
 
           <!-- ================================= -->
@@ -140,6 +500,7 @@ onBeforeUnmount(() => {
             class="mx-auto mt-8 flex w-full max-w-2xl items-center justify-center gap-2.5 px-0.5 sm:mt-10 sm:gap-5 sm:px-0"
           >
             <!-- About -->
+
             <button
               type="button"
               @click="showSection('about')"
@@ -149,9 +510,10 @@ onBeforeUnmount(() => {
               About
             </button>
 
-            <span class="shrink-0 text-white/10">/</span>
+            <span class="shrink-0 text-white/10"> / </span>
 
             <!-- Experience -->
+
             <button
               type="button"
               @click="showSection('experience')"
@@ -161,9 +523,10 @@ onBeforeUnmount(() => {
               Experience
             </button>
 
-            <span class="shrink-0 text-white/10">/</span>
+            <span class="shrink-0 text-white/10"> / </span>
 
             <!-- Certifications -->
+
             <button
               type="button"
               @click="showSection('certifications')"
@@ -173,9 +536,10 @@ onBeforeUnmount(() => {
               Certifications
             </button>
 
-            <span class="shrink-0 text-white/10">/</span>
+            <span class="shrink-0 text-white/10"> / </span>
 
             <!-- Hire Me -->
+
             <button
               type="button"
               @click="showSection('hire-me')"
@@ -194,21 +558,25 @@ onBeforeUnmount(() => {
 
       <div class="border-t border-white/5">
         <!-- ABOUT -->
+
         <div v-show="activeSection === 'about'" class="section-content">
           <About />
         </div>
 
         <!-- EXPERIENCE -->
+
         <div v-show="activeSection === 'experience'" class="section-content">
           <Experience />
         </div>
 
         <!-- CERTIFICATIONS -->
+
         <div v-show="activeSection === 'certifications'" class="section-content">
           <Certifications />
         </div>
 
         <!-- HIRE ME -->
+
         <div v-show="activeSection === 'hire-me'" class="section-content">
           <HireMe />
         </div>
@@ -221,6 +589,7 @@ onBeforeUnmount(() => {
 
     <footer class="relative z-10 border-t border-white/5 px-5 py-8 text-center sm:px-6">
       <!-- Resume Button -->
+
       <div class="mb-6 flex justify-center">
         <div class="aura aura-dual">
           <a
@@ -229,7 +598,7 @@ onBeforeUnmount(() => {
             rel="noopener noreferrer"
             class="group flex items-center gap-2 rounded-lg border border-white/10 bg-black px-5 py-2.5 text-base font-semibold text-white transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05]"
           >
-            <span>View My Resume</span>
+            <span> View My Resume </span>
 
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -246,6 +615,7 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- Copyright -->
+
       <span class="text-xs text-gray-700 sm:text-sm"> © 2026 Marwin Joseph. All rights reserved. </span>
     </footer>
 
@@ -293,14 +663,15 @@ onBeforeUnmount(() => {
 .stars {
   position: absolute;
   inset: -100px;
+
   background-repeat: repeat;
+
   pointer-events: none;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
 }
 
-/* Small Stars */
+/* ================================= */
+/* SMALL STARS */
+/* ================================= */
 
 .stars-small {
   opacity: 0.75;
@@ -318,10 +689,11 @@ onBeforeUnmount(() => {
     50px 70px;
 
   animation: stars-drift-small 80s linear infinite;
-  -webkit-animation: stars-drift-small 80s linear infinite;
 }
 
-/* Medium Stars */
+/* ================================= */
+/* MEDIUM STARS */
+/* ================================= */
 
 .stars-medium {
   opacity: 0.55;
@@ -339,10 +711,11 @@ onBeforeUnmount(() => {
     100px 150px;
 
   animation: stars-drift-medium 120s linear infinite;
-  -webkit-animation: stars-drift-medium 120s linear infinite;
 }
 
-/* Large Stars */
+/* ================================= */
+/* LARGE STARS */
+/* ================================= */
 
 .stars-large {
   opacity: 0.8;
@@ -352,46 +725,29 @@ onBeforeUnmount(() => {
   background-size: 320px 320px;
 
   animation: stars-twinkle 4s ease-in-out infinite alternate;
-  -webkit-animation: stars-twinkle 4s ease-in-out infinite alternate;
 }
+
+/* ================================= */
+/* STAR ANIMATIONS */
+/* ================================= */
 
 @keyframes stars-drift-small {
   from {
-    transform: translate3d(0, 0, 0);
+    transform: translate(0, 0);
   }
 
   to {
-    transform: translate3d(-100px, 80px, 0);
-  }
-}
-
-@-webkit-keyframes stars-drift-small {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(-100px, 80px, 0);
+    transform: translate(-100px, 80px);
   }
 }
 
 @keyframes stars-drift-medium {
   from {
-    transform: translate3d(0, 0, 0);
+    transform: translate(0, 0);
   }
 
   to {
-    transform: translate3d(150px, -100px, 0);
-  }
-}
-
-@-webkit-keyframes stars-drift-medium {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(150px, -100px, 0);
+    transform: translate(150px, -100px);
   }
 }
 
@@ -415,13 +771,12 @@ onBeforeUnmount(() => {
 
 .nebula {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
 
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  border-radius: 50%;
+
+  filter: blur(100px);
+
+  pointer-events: none;
 }
 
 /* Top Left */
@@ -438,7 +793,6 @@ onBeforeUnmount(() => {
   background: radial-gradient(ellipse, rgba(90, 80, 255, 0.45), rgba(60, 40, 160, 0.15), transparent 70%);
 
   animation: nebula-one 18s ease-in-out infinite alternate;
-  -webkit-animation: nebula-one 18s ease-in-out infinite alternate;
 }
 
 /* Right */
@@ -455,7 +809,6 @@ onBeforeUnmount(() => {
   background: radial-gradient(ellipse, rgba(120, 70, 255, 0.3), rgba(40, 80, 180, 0.15), transparent 70%);
 
   animation: nebula-two 22s ease-in-out infinite alternate;
-  -webkit-animation: nebula-two 22s ease-in-out infinite alternate;
 }
 
 /* Bottom */
@@ -472,42 +825,50 @@ onBeforeUnmount(() => {
   background: radial-gradient(ellipse, rgba(40, 90, 255, 0.25), rgba(100, 40, 180, 0.12), transparent 70%);
 
   animation: nebula-three 25s ease-in-out infinite alternate;
-  -webkit-animation: nebula-three 25s ease-in-out infinite alternate;
 }
 
 @keyframes nebula-one {
   from {
-    transform: translate3d(-50px, 0, 0) scale(1);
+    transform: translate(-50px, 0) scale(1);
   }
 
   to {
-    transform: translate3d(100px, 80px, 0) scale(1.25);
+    transform: translate(100px, 80px) scale(1.25);
   }
 }
 
 @keyframes nebula-two {
   from {
-    transform: translate3d(50px, -30px, 0) scale(1);
+    transform: translate(50px, -30px) scale(1);
   }
 
   to {
-    transform: translate3d(-100px, 100px, 0) scale(1.3);
+    transform: translate(-100px, 100px) scale(1.3);
   }
 }
 
 @keyframes nebula-three {
   from {
-    transform: translate3d(0, 30px, 0) scale(1);
+    transform: translate(0, 30px) scale(1);
   }
 
   to {
-    transform: translate3d(80px, -80px, 0) scale(1.25);
+    transform: translate(80px, -80px) scale(1.25);
   }
 }
 
 /* ================================= */
 /* SHOOTING STARS */
 /* ================================= */
+
+/*
+ * IMPORTANT:
+ *
+ * There is NO CSS animation here.
+ *
+ * JavaScript requestAnimationFrame()
+ * controls transform + opacity.
+ */
 
 .shooting-star {
   position: absolute;
@@ -517,20 +878,17 @@ onBeforeUnmount(() => {
 
   border-radius: 50%;
 
-  background: white;
+  background: #ffffff;
 
   box-shadow:
-    0 0 6px white,
+    0 0 6px #ffffff,
     0 0 15px rgba(150, 170, 255, 0.9);
 
   opacity: 0;
 
-  will-change: transform, opacity;
-  transform: translate3d(0, 0, 0) rotate(-35deg);
-  -webkit-transform: translate3d(0, 0, 0) rotate(-35deg);
+  pointer-events: none;
 
-  animation: shooting-star 7s linear infinite;
-  -webkit-animation: shooting-star 7s linear infinite;
+  transform: translate3d(0, 0, 0) rotate(-35deg);
 }
 
 .shooting-star::after {
@@ -541,78 +899,33 @@ onBeforeUnmount(() => {
   width: 120px;
   height: 1px;
 
-  right: 0;
   top: 0;
+  right: 0;
 
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.85), transparent);
 
-  transform-origin: right;
+  transform-origin: right center;
+
+  pointer-events: none;
 }
+
+/* ================================= */
+/* SHOOTING STAR POSITIONS */
+/* ================================= */
 
 .shooting-star-1 {
   top: 15%;
   left: 70%;
-
-  animation-delay: 2s;
-  -webkit-animation-delay: 2s;
 }
 
 .shooting-star-2 {
   top: 35%;
   left: 20%;
-
-  animation-delay: 5s;
-  -webkit-animation-delay: 5s;
 }
 
 .shooting-star-3 {
   top: 60%;
   left: 80%;
-
-  animation-delay: 8s;
-  -webkit-animation-delay: 8s;
-}
-
-@keyframes shooting-star {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(-35deg);
-  }
-
-  5% {
-    opacity: 1;
-  }
-
-  15% {
-    opacity: 0;
-    transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-}
-
-@-webkit-keyframes shooting-star {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 0, 0) rotate(-35deg);
-  }
-
-  5% {
-    opacity: 1;
-  }
-
-  15% {
-    opacity: 0;
-    -webkit-transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
 }
 
 /* ================================= */
@@ -625,8 +938,7 @@ onBeforeUnmount(() => {
   width: 500px;
   height: 500px;
 
-  transform: translate3d(-50%, -50%, 0);
-  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate(-50%, -50%);
 
   border-radius: 50%;
 
@@ -656,6 +968,8 @@ onBeforeUnmount(() => {
     rgba(0, 0, 0, 0.6) 80%,
     #000 100%
   );
+
+  pointer-events: none;
 }
 
 /* ================================= */
@@ -670,15 +984,10 @@ onBeforeUnmount(() => {
   transition:
     transform 0.5s ease,
     box-shadow 0.5s ease;
-
-  will-change: transform;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 
 .profile-wrapper:hover {
   transform: scale(1.03);
-  -webkit-transform: scale(1.03);
 
   box-shadow:
     0 0 60px rgba(255, 255, 255, 0.15),
@@ -702,10 +1011,7 @@ onBeforeUnmount(() => {
 
   filter: blur(10px);
 
-  will-change: transform;
-
   animation: profile-spin 8s linear infinite;
-  -webkit-animation: profile-spin 8s linear infinite;
 }
 
 @keyframes profile-spin {
@@ -715,16 +1021,6 @@ onBeforeUnmount(() => {
 
   to {
     transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes profile-spin {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-
-  to {
-    -webkit-transform: rotate(360deg);
   }
 }
 
@@ -749,8 +1045,7 @@ onBeforeUnmount(() => {
 
   background: white;
 
-  transform: translate3d(-50%, 0, 0);
-  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translateX(-50%);
 
   transition: width 0.3s ease;
 }
@@ -765,184 +1060,20 @@ onBeforeUnmount(() => {
 
 .section-content {
   animation: section-enter 0.45s ease;
-  -webkit-animation: section-enter 0.45s ease;
 }
 
 @keyframes section-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 12px, 0);
+
+    transform: translateY(12px);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0);
+
+    transform: translateY(0);
   }
-}
-
-@-webkit-keyframes section-enter {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 12px, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ================================= */
-/* TECH MARQUEE */
-/* ================================= */
-
-.tech-marquee {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-
-  /*
-   * Safari / iOS fix
-   */
-  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-
-  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-}
-
-.tech-track {
-  display: flex;
-  width: max-content;
-  align-items: center;
-  gap: 28px;
-
-  flex-shrink: 0;
-
-  /*
-   * IMPORTANT FOR SAFARI / IOS
-   */
-  will-change: transform;
-
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-}
-
-.tech-item {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 7px;
-
-  white-space: nowrap;
-
-  font-size: 13px;
-  color: #6b7280;
-
-  /*
-   * Force Safari into GPU layer
-   */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.tech-item img {
-  display: block;
-  flex-shrink: 0;
-
-  width: 20px;
-  height: 20px;
-
-  object-fit: contain;
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-.tech-item:hover {
-  color: #fff;
-
-  transform: translate3d(0, -1px, 0);
-  -webkit-transform: translate3d(0, -1px, 0);
-}
-
-/* ================================= */
-/* LEFT MARQUEE */
-/* ================================= */
-
-.tech-track-left {
-  animation: marquee-left 35s linear infinite;
-  -webkit-animation: marquee-left 35s linear infinite;
-}
-
-/* ================================= */
-/* RIGHT MARQUEE */
-/* ================================= */
-
-.tech-track-right {
-  animation: marquee-right 35s linear infinite;
-  -webkit-animation: marquee-right 35s linear infinite;
-}
-
-/* ================================= */
-/* MARQUEE ANIMATION */
-/* ================================= */
-
-@keyframes marquee-left {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@-webkit-keyframes marquee-left {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes marquee-right {
-  from {
-    transform: translate3d(-50%, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes marquee-right {
-  from {
-    -webkit-transform: translate3d(-50%, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ================================= */
-/* PAUSE ON DESKTOP HOVER */
-/* ================================= */
-
-.tech-marquee:hover .tech-track {
-  animation-play-state: paused;
-  -webkit-animation-play-state: paused;
 }
 
 /* ================================= */
@@ -953,9 +1084,6 @@ onBeforeUnmount(() => {
   box-shadow:
     0 0 20px rgba(255, 255, 255, 0.05),
     0 0 40px rgba(100, 100, 255, 0.04);
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 .go-top-button:hover {
@@ -964,7 +1092,9 @@ onBeforeUnmount(() => {
     0 0 50px rgba(100, 100, 255, 0.08);
 }
 
-/* Go Top Animation */
+/* ================================= */
+/* GO TOP TRANSITION */
+/* ================================= */
 
 .go-top-enter-active,
 .go-top-leave-active {
@@ -977,8 +1107,7 @@ onBeforeUnmount(() => {
 .go-top-leave-to {
   opacity: 0;
 
-  transform: translate3d(0, 15px, 0) scale(0.9);
-  -webkit-transform: translate3d(0, 15px, 0) scale(0.9);
+  transform: translateY(15px) scale(0.9);
 }
 
 /* ================================= */
@@ -990,39 +1119,23 @@ onBeforeUnmount(() => {
   .nebula-two,
   .nebula-three {
     filter: blur(80px);
+
     opacity: 0.18;
   }
 
+  /*
+   * Mouse glow isn't useful on touch devices.
+   */
   .cosmic-cursor {
     display: none;
   }
 
-  .shooting-star {
-    animation-duration: 9s;
-    -webkit-animation-duration: 9s;
-  }
-
-  .tech-track {
-    gap: 20px;
-  }
-
-  .tech-item {
-    font-size: 12px;
-  }
-
-  .tech-item img {
-    width: 18px;
-    height: 18px;
-  }
-
-  .tech-track-left {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
-  }
-
-  .tech-track-right {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
+  /*
+   * Slightly smaller shooting-star trail
+   * for mobile screens.
+   */
+  .shooting-star::after {
+    width: 90px;
   }
 
   .go-top-button {
@@ -1037,109 +1150,6 @@ onBeforeUnmount(() => {
 }
 
 /* ================================= */
-/* IOS SAFARI */
-/* ================================= */
-
-@supports (-webkit-touch-callout: none) {
-  .tech-marquee {
-    overflow: hidden;
-
-    /*
-     * Prevent Safari from treating the
-     * animated content as a normal layout.
-     */
-    contain: layout paint;
-  }
-
-  .tech-track {
-    display: flex;
-    width: max-content;
-
-    will-change: transform;
-
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .tech-track-left {
-    animation: marquee-left-ios 35s linear infinite;
-    -webkit-animation: marquee-left-ios 35s linear infinite;
-  }
-
-  .tech-track-right {
-    animation: marquee-right-ios 35s linear infinite;
-    -webkit-animation: marquee-right-ios 35s linear infinite;
-  }
-
-  @keyframes marquee-left-ios {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-left-ios {
-    from {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @keyframes marquee-right-ios {
-    from {
-      transform: translate3d(-50%, 0, 0);
-    }
-
-    to {
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-right-ios {
-    from {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-  }
-}
-
-/* ================================= */
-/* REDUCE MOTION */
-/* ================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .stars,
-  .nebula,
-  .shooting-star,
-  .profile-glow,
-  .tech-track {
-    animation: none !important;
-    -webkit-animation: none !important;
-  }
-
-  .cosmic-cursor {
-    transition: none;
-  }
-
-  .go-top-enter-active,
-  .go-top-leave-active {
-    transition: none;
-  }
-}
-
-/* ================================= */
 /* CIRCULAR PROFILE HOVER GALLERY */
 /* ================================= */
 
@@ -1149,15 +1159,6 @@ onBeforeUnmount(() => {
 
   border-radius: 9999px;
   overflow: hidden;
-
-  /*
-   * Safari / iOS rendering
-   */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .profile-gallery img {
@@ -1169,10 +1170,11 @@ onBeforeUnmount(() => {
   border-radius: 9999px;
 
   display: block;
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
+
+/* ================================= */
+/* PROFILE GALLERY MOBILE */
+/* ================================= */
 
 @media (max-width: 640px) {
   .profile-gallery {
@@ -1187,7 +1189,9 @@ onBeforeUnmount(() => {
 
 .aura {
   position: relative;
+
   display: inline-flex;
+
   isolation: isolate;
 }
 
@@ -1246,25 +1250,5 @@ onBeforeUnmount(() => {
   opacity: 0.5;
 
   transform: scale(1.04);
-}
-
-/* ================================= */
-/* SAFARI GPU OPTIMIZATION */
-/* ================================= */
-
-@supports (-webkit-touch-callout: none) {
-  .shooting-star,
-  .stars,
-  .nebula,
-  .profile-glow,
-  .tech-track {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-
-    will-change: transform;
-  }
 }
 </style>
