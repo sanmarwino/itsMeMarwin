@@ -847,17 +847,4 @@ const Projects = ref([
     }
   }
 }
-
-/*
-|--------------------------------------------------------------------------
-| REDUCED MOTION
-|--------------------------------------------------------------------------
-*/
-
-@media (prefers-reduced-motion: reduce) {
-  .tech-track {
-    animation: none !important;
-    -webkit-animation: none !important;
-  }
-}
 </style>
