@@ -550,13 +550,21 @@ const Projects = ref([
 <style scoped>
 /*
 |--------------------------------------------------------------------------
-| Tech Marquee
+| TECH MARQUEE
 |--------------------------------------------------------------------------
 */
 
 .tech-marquee {
+  position: relative;
   width: 100%;
   overflow: hidden;
+
+  /* Safari */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+
+  /* Prevent Safari layout issues */
+  contain: layout paint;
 }
 
 .tech-track {
@@ -564,6 +572,20 @@ const Projects = ref([
   width: max-content;
   align-items: center;
   gap: 28px;
+
+  flex-shrink: 0;
+
+  /* Force GPU layer */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+
+  will-change: transform;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 .tech-item {
@@ -575,75 +597,267 @@ const Projects = ref([
   white-space: nowrap;
 
   font-size: 13px;
+  line-height: 1;
+
   color: #6b7280;
+
+  /* Safari GPU */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   transition:
     color 0.2s ease,
     transform 0.2s ease;
 }
 
+.tech-item img {
+  display: block;
+
+  width: 20px;
+  height: 20px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 .tech-item:hover {
   color: #fff;
-  transform: translateY(-1px);
-}
 
-.tech-track-left {
-  animation: marquee-left 35s linear infinite;
-}
-
-.tech-track-right {
-  animation: marquee-right 35s linear infinite;
-}
-
-@keyframes marquee-left {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marquee-right {
-  from {
-    transform: translateX(-50%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-.tech-marquee:hover .tech-track {
-  animation-play-state: paused;
+  transform: translate3d(0, -1px, 0);
+  -webkit-transform: translate3d(0, -1px, 0);
 }
 
 /*
 |--------------------------------------------------------------------------
-| Mobile
+| LEFT MARQUEE
+|--------------------------------------------------------------------------
+*/
+
+.tech-track-left {
+  animation: marquee-left 35s linear infinite;
+  -webkit-animation: marquee-left 35s linear infinite;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RIGHT MARQUEE
+|--------------------------------------------------------------------------
+*/
+
+.tech-track-right {
+  animation: marquee-right 35s linear infinite;
+  -webkit-animation: marquee-right 35s linear infinite;
+}
+
+/*
+|--------------------------------------------------------------------------
+| LEFT ANIMATION
+|--------------------------------------------------------------------------
+*/
+
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@-webkit-keyframes marquee-left {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| RIGHT ANIMATION
+|--------------------------------------------------------------------------
+*/
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@-webkit-keyframes marquee-right {
+  0% {
+    -webkit-transform: translate3d(-50%, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| DESKTOP HOVER
+|--------------------------------------------------------------------------
+*/
+
+.tech-marquee:hover .tech-track {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+}
+
+/*
+|--------------------------------------------------------------------------
+| MOBILE
 |--------------------------------------------------------------------------
 */
 
 @media (max-width: 640px) {
+  .tech-marquee {
+    overflow: hidden;
+  }
+
   .tech-track {
     gap: 20px;
+
+    will-change: transform;
+
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
   }
 
   .tech-item {
     font-size: 12px;
   }
+
+  .tech-item img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .tech-track-left {
+    animation-duration: 30s;
+    -webkit-animation-duration: 30s;
+  }
+
+  .tech-track-right {
+    animation-duration: 30s;
+    -webkit-animation-duration: 30s;
+  }
 }
 
 /*
 |--------------------------------------------------------------------------
-| Reduced Motion
+| IOS SAFARI
+|--------------------------------------------------------------------------
+*/
+
+@supports (-webkit-touch-callout: none) {
+  .tech-marquee {
+    overflow: hidden;
+
+    contain: layout paint;
+
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  }
+
+  .tech-track {
+    display: flex;
+    width: max-content;
+
+    flex-shrink: 0;
+
+    will-change: transform;
+
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
+  }
+
+  .tech-track-left {
+    animation: marquee-left-ios 35s linear infinite;
+    -webkit-animation: marquee-left-ios 35s linear infinite;
+  }
+
+  .tech-track-right {
+    animation: marquee-right-ios 35s linear infinite;
+    -webkit-animation: marquee-right-ios 35s linear infinite;
+  }
+
+  @keyframes marquee-left-ios {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @-webkit-keyframes marquee-left-ios {
+    0% {
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+      -webkit-transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-right-ios {
+    0% {
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @-webkit-keyframes marquee-right-ios {
+    0% {
+      -webkit-transform: translate3d(-50%, 0, 0);
+    }
+
+    100% {
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+/*
+|--------------------------------------------------------------------------
+| REDUCED MOTION
 |--------------------------------------------------------------------------
 */
 
 @media (prefers-reduced-motion: reduce) {
   .tech-track {
     animation: none !important;
+    -webkit-animation: none !important;
   }
 }
 </style>
