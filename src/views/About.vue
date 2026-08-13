@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 
 /*
 |--------------------------------------------------------------------------
@@ -192,6 +192,192 @@ const Projects = ref([
     technologies: ["Vue.js", "Google AI Studio", "Activepieces", "JavaScript"],
   },
 ]);
+
+/*
+|--------------------------------------------------------------------------
+| iOS / Safari Marquee Animation
+|--------------------------------------------------------------------------
+|
+| We intentionally use requestAnimationFrame instead of CSS @keyframes.
+| This avoids Safari/iOS issues with percentage-based marquee animations.
+|--------------------------------------------------------------------------
+*/
+
+const marqueeContainer = ref(null);
+
+let animationFrame = null;
+let lastTime = 0;
+let resizeTimer = null;
+
+const marqueeStates = [];
+
+/*
+|--------------------------------------------------------------------------
+| Initialize Marquees
+|--------------------------------------------------------------------------
+*/
+
+const initializeMarquees = () => {
+  if (!marqueeContainer.value) {
+    return;
+  }
+
+  const tracks = marqueeContainer.value.querySelectorAll(".tech-track");
+
+  marqueeStates.length = 0;
+
+  tracks.forEach((track, index) => {
+    const halfWidth = track.scrollWidth / 2;
+
+    /*
+     * Row 1 = LEFT
+     * Row 2 = RIGHT
+     * Row 3 = LEFT
+     * Row 4 = RIGHT
+     */
+
+    const isRight = index % 2 === 1;
+
+    marqueeStates.push({
+      element: track,
+      position: isRight ? -halfWidth : 0,
+      direction: isRight ? 1 : -1,
+      width: halfWidth,
+    });
+
+    const initialTransform = `translate3d(${isRight ? -halfWidth : 0}px, 0, 0)`;
+
+    track.style.transform = initialTransform;
+    track.style.webkitTransform = initialTransform;
+  });
+
+  lastTime = 0;
+};
+
+/*
+|--------------------------------------------------------------------------
+| Animate
+|--------------------------------------------------------------------------
+*/
+
+const animateMarquees = (timestamp) => {
+  /*
+   * Don't run unnecessarily when the browser tab is hidden.
+   */
+  if (document.hidden) {
+    lastTime = timestamp;
+
+    animationFrame = requestAnimationFrame(animateMarquees);
+
+    return;
+  }
+
+  if (!lastTime) {
+    lastTime = timestamp;
+  }
+
+  /*
+   * Prevent a huge jump when the browser freezes briefly.
+   */
+  const delta = Math.min(timestamp - lastTime, 50);
+
+  lastTime = timestamp;
+
+  /*
+   * Speed in pixels per second.
+   */
+  const speed = 35;
+
+  marqueeStates.forEach((state) => {
+    if (!state.element) {
+      return;
+    }
+
+    state.position += state.direction * speed * (delta / 1000);
+
+    /*
+     * LEFT
+     */
+    if (state.direction === -1) {
+      if (state.position <= -state.width) {
+        state.position = 0;
+      }
+    }
+
+    /*
+     * RIGHT
+     */
+    if (state.direction === 1) {
+      if (state.position >= 0) {
+        state.position = -state.width;
+      }
+    }
+
+    const transform = `translate3d(${state.position}px, 0, 0)`;
+
+    state.element.style.transform = transform;
+    state.element.style.webkitTransform = transform;
+  });
+
+  animationFrame = requestAnimationFrame(animateMarquees);
+};
+
+/*
+|--------------------------------------------------------------------------
+| Recalculate On Resize / Orientation Change
+|--------------------------------------------------------------------------
+*/
+
+const handleResize = () => {
+  clearTimeout(resizeTimer);
+
+  resizeTimer = setTimeout(() => {
+    initializeMarquees();
+  }, 150);
+};
+
+/*
+|--------------------------------------------------------------------------
+| Lifecycle
+|--------------------------------------------------------------------------
+*/
+
+onMounted(() => {
+  /*
+   * Wait for Vue DOM rendering.
+   */
+  requestAnimationFrame(() => {
+    /*
+     * Give images a moment to load so scrollWidth
+     * is calculated correctly.
+     */
+    setTimeout(() => {
+      initializeMarquees();
+
+      animationFrame = requestAnimationFrame(animateMarquees);
+    }, 300);
+  });
+
+  window.addEventListener("resize", handleResize);
+  window.addEventListener("orientationchange", handleResize);
+
+  /*
+   * Images can change the width of the marquee.
+   */
+  window.addEventListener("load", initializeMarquees);
+});
+
+onBeforeUnmount(() => {
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+
+  clearTimeout(resizeTimer);
+
+  window.removeEventListener("resize", handleResize);
+  window.removeEventListener("orientationchange", handleResize);
+  window.removeEventListener("load", initializeMarquees);
+});
 </script>
 
 <template>
@@ -218,92 +404,122 @@ const Projects = ref([
   </section>
 
   <!-- ================================= -->
-  <!-- TECH STACK -->
+  <!-- MARQUEE CONTAINER -->
   <!-- ================================= -->
 
-  <section class="border-t border-white/5 py-5 sm:py-20">
-    <h2 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">My Tech Stack</h2>
+  <div ref="marqueeContainer">
+    <!-- ================================= -->
+    <!-- TECH STACK -->
+    <!-- ================================= -->
 
-    <div class="space-y-3">
-      <!-- First Row -->
-      <div class="tech-marquee">
-        <div class="tech-track tech-track-left">
-          <div v-for="tech in techStack" :key="`about-tech-1-${tech.name}`" class="tech-item">
-            <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" />
+    <section class="border-t border-white/5 py-5 sm:py-20">
+      <h2 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">My Tech Stack</h2>
 
-            <span>{{ tech.name }}</span>
+      <div class="space-y-3">
+        <!-- FIRST ROW -->
+        <div class="tech-marquee">
+          <div class="tech-track">
+            <!-- Original -->
+            <div v-for="tech in techStack" :key="`about-tech-1-${tech.name}`" class="tech-item">
+              <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tech.name }}
+              </span>
+            </div>
+
+            <!-- Duplicate -->
+            <div v-for="tech in techStack" :key="`about-tech-1-copy-${tech.name}`" class="tech-item">
+              <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tech.name }}
+              </span>
+            </div>
           </div>
+        </div>
 
-          <div v-for="tech in techStack" :key="`about-tech-1-copy-${tech.name}`" class="tech-item">
-            <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" />
+        <!-- SECOND ROW -->
+        <div class="tech-marquee">
+          <div class="tech-track">
+            <!-- Reversed -->
+            <div v-for="tech in [...techStack].reverse()" :key="`about-tech-2-${tech.name}`" class="tech-item">
+              <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" draggable="false" />
 
-            <span>{{ tech.name }}</span>
+              <span>
+                {{ tech.name }}
+              </span>
+            </div>
+
+            <!-- Duplicate -->
+            <div v-for="tech in [...techStack].reverse()" :key="`about-tech-2-copy-${tech.name}`" class="tech-item">
+              <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tech.name }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Second Row -->
-      <div class="tech-marquee">
-        <div class="tech-track tech-track-right">
-          <div v-for="tech in [...techStack].reverse()" :key="`about-tech-2-${tech.name}`" class="tech-item">
-            <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" />
+    <!-- ================================= -->
+    <!-- DEVELOPMENT TOOLS -->
+    <!-- ================================= -->
 
-            <span>{{ tech.name }}</span>
+    <section class="border-t border-white/5 py-5 sm:py-20">
+      <h2 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">Development Tools & Applications</h2>
+
+      <div class="space-y-3">
+        <!-- FIRST ROW -->
+        <div class="tech-marquee">
+          <div class="tech-track">
+            <!-- Original -->
+            <div v-for="tool in developmentTools" :key="`tools-1-${tool.name}`" class="tech-item">
+              <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tool.name }}
+              </span>
+            </div>
+
+            <!-- Duplicate -->
+            <div v-for="tool in developmentTools" :key="`tools-1-copy-${tool.name}`" class="tech-item">
+              <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tool.name }}
+              </span>
+            </div>
           </div>
+        </div>
 
-          <div v-for="tech in [...techStack].reverse()" :key="`about-tech-2-copy-${tech.name}`" class="tech-item">
-            <img :src="tech.icon" :alt="tech.name" class="h-5 w-5 object-contain" />
+        <!-- SECOND ROW -->
+        <div class="tech-marquee">
+          <div class="tech-track">
+            <!-- Reversed -->
+            <div v-for="tool in [...developmentTools].reverse()" :key="`tools-2-${tool.name}`" class="tech-item">
+              <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" draggable="false" />
 
-            <span>{{ tech.name }}</span>
+              <span>
+                {{ tool.name }}
+              </span>
+            </div>
+
+            <!-- Duplicate -->
+            <div v-for="tool in [...developmentTools].reverse()" :key="`tools-2-copy-${tool.name}`" class="tech-item">
+              <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" draggable="false" />
+
+              <span>
+                {{ tool.name }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ================================= -->
-  <!-- DEVELOPMENT TOOLS -->
-  <!-- ================================= -->
-
-  <section class="border-t border-white/5 py-5 sm:py-20">
-    <h2 class="mb-6 text-3xl font-bold tracking-tight sm:text-4xl">Development Tools & Applications</h2>
-
-    <div class="space-y-3">
-      <!-- First Row -->
-      <div class="tech-marquee">
-        <div class="tech-track tech-track-left">
-          <div v-for="tool in developmentTools" :key="`tools-1-${tool.name}`" class="tech-item">
-            <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" />
-
-            <span>{{ tool.name }}</span>
-          </div>
-
-          <div v-for="tool in developmentTools" :key="`tools-1-copy-${tool.name}`" class="tech-item">
-            <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" />
-
-            <span>{{ tool.name }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Second Row -->
-      <div class="tech-marquee">
-        <div class="tech-track tech-track-right">
-          <div v-for="tool in [...developmentTools].reverse()" :key="`tools-2-${tool.name}`" class="tech-item">
-            <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" />
-
-            <span>{{ tool.name }}</span>
-          </div>
-
-          <div v-for="tool in [...developmentTools].reverse()" :key="`tools-2-copy-${tool.name}`" class="tech-item">
-            <img :src="tool.icon" :alt="tool.name" class="h-5 w-5 object-contain" />
-
-            <span>{{ tool.name }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- ================================= -->
   <!-- PROJECTS -->
@@ -325,15 +541,11 @@ const Projects = ref([
         class="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]"
       >
         <div class="flex flex-col sm:flex-row">
-          <!-- ================================= -->
           <!-- PROJECT IMAGE -->
-          <!-- ================================= -->
-
           <div
             class="group/image relative h-48 w-full shrink-0 cursor-pointer overflow-hidden bg-white/[0.035] sm:h-56 sm:w-64"
             @click="openProjectImage(project)"
           >
-            <!-- Image -->
             <img
               :src="project.image"
               :alt="project.title"
@@ -344,7 +556,6 @@ const Projects = ref([
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-300 group-hover/image:bg-black/60"
             >
-              <!-- View Project Button -->
               <div
                 class="translate-y-3 scale-90 rounded-full border border-white/20 bg-black/60 px-5 py-2.5 text-sm font-medium text-white opacity-0 shadow-xl backdrop-blur-md transition-all duration-300 group-hover/image:translate-y-0 group-hover/image:scale-100 group-hover/image:opacity-100"
               >
@@ -373,10 +584,7 @@ const Projects = ref([
             </div>
           </div>
 
-          <!-- ================================= -->
           <!-- PROJECT CONTENT -->
-          <!-- ================================= -->
-
           <div class="flex flex-1 flex-col justify-center p-5 sm:p-6">
             <!-- Category -->
             <p class="text-xs font-medium uppercase tracking-[0.15em] text-gray-600">
@@ -408,10 +616,7 @@ const Projects = ref([
       </article>
     </div>
 
-    <!-- ================================= -->
     <!-- SHOW MORE / SHOW LESS -->
-    <!-- ================================= -->
-
     <div v-if="Projects.length > 3" class="mt-8 flex justify-center">
       <button
         v-if="visibleCount < Projects.length"
@@ -499,10 +704,7 @@ const Projects = ref([
         </button>
       </div>
 
-      <!-- ================================= -->
       <!-- LARGE IMAGE -->
-      <!-- ================================= -->
-
       <div class="flex max-h-[70vh] items-center justify-center overflow-auto bg-black p-3 sm:p-6">
         <img
           :src="selectedProject.image"
@@ -511,10 +713,7 @@ const Projects = ref([
         />
       </div>
 
-      <!-- ================================= -->
       <!-- MODAL CONTENT -->
-      <!-- ================================= -->
-
       <div class="border-t border-white/10 px-5 py-5">
         <h4 class="text-base font-semibold text-white">
           {{ selectedProject.title }}
@@ -537,10 +736,7 @@ const Projects = ref([
       </div>
     </div>
 
-    <!-- ================================= -->
     <!-- CLICK OUTSIDE TO CLOSE -->
-    <!-- ================================= -->
-
     <form method="dialog" class="modal-backdrop">
       <button @click="closeProjectImage">close</button>
     </form>
@@ -548,9 +744,11 @@ const Projects = ref([
 </template>
 
 <style scoped>
-/* =========================================
-   TECH / TOOLS MARQUEE
-========================================= */
+/*
+|--------------------------------------------------------------------------
+| TECH / TOOLS MARQUEE
+|--------------------------------------------------------------------------
+*/
 
 .tech-marquee {
   position: relative;
@@ -558,62 +756,45 @@ const Projects = ref([
   overflow: hidden;
 }
 
-/* Fade edges */
-.tech-marquee::before,
-.tech-marquee::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.tech-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, var(--fade-bg, #050507), transparent);
-}
-
-.tech-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, var(--fade-bg, #050507), transparent);
-}
-
-/* =========================================
-   TRACK
-========================================= */
+/*
+|--------------------------------------------------------------------------
+| Track
+|--------------------------------------------------------------------------
+*/
 
 .tech-track {
   display: flex;
   align-items: center;
 
   width: max-content;
+
+  flex-shrink: 0;
   flex-wrap: nowrap;
 
   gap: 28px;
 
-  /* Important for iOS */
-  -webkit-transform: translateX(0);
-  transform: translateX(0);
+  /*
+     * GPU acceleration.
+     *
+     * JavaScript controls the actual transform.
+     */
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 
-  -webkit-animation-timing-function: linear;
-  animation-timing-function: linear;
-
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
-
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* =========================================
-   ITEMS
-========================================= */
+/*
+|--------------------------------------------------------------------------
+| Items
+|--------------------------------------------------------------------------
+*/
 
 .tech-item {
   display: flex;
   align-items: center;
+
   flex-shrink: 0;
 
   gap: 7px;
@@ -644,92 +825,16 @@ const Projects = ref([
 
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
-/* =========================================
-   LEFT
-========================================= */
-
-.tech-track-left {
-  -webkit-animation: marquee-left 30s linear infinite;
-  animation: marquee-left 30s linear infinite;
-}
-
-/* =========================================
-   RIGHT
-========================================= */
-
-.tech-track-right {
-  -webkit-animation: marquee-right 30s linear infinite;
-  animation: marquee-right 30s linear infinite;
-}
-
-/* =========================================
-   ANIMATION
-========================================= */
-
-@-webkit-keyframes marquee-left {
-  from {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-
-  to {
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marquee-left {
-  from {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-
-  to {
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-}
-
-@-webkit-keyframes marquee-right {
-  from {
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-
-  to {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-
-@keyframes marquee-right {
-  from {
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-
-  to {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-
-/* =========================================
-   DESKTOP HOVER
-========================================= */
-
-@media (hover: hover) and (pointer: fine) {
-  .tech-marquee:hover .tech-track {
-    -webkit-animation-play-state: paused;
-    animation-play-state: paused;
-  }
-}
-
-/* =========================================
-   MOBILE
-========================================= */
+/*
+|--------------------------------------------------------------------------
+| Mobile
+|--------------------------------------------------------------------------
+*/
 
 @media (max-width: 640px) {
   .tech-track {
@@ -744,28 +849,39 @@ const Projects = ref([
     width: 18px;
     height: 18px;
   }
-
-  .tech-track-left {
-    -webkit-animation-duration: 25s;
-    animation-duration: 25s;
-  }
-
-  .tech-track-right {
-    -webkit-animation-duration: 25s;
-    animation-duration: 25s;
-  }
 }
 
-/* =========================================
-   REDUCED MOTION
-========================================= */
+/*
+|--------------------------------------------------------------------------
+| Fade Edges
+|--------------------------------------------------------------------------
+*/
 
-@media (prefers-reduced-motion: reduce) {
-  .tech-track {
-    -webkit-animation: none !important;
-    animation: none !important;
-    -webkit-transform: none !important;
-    transform: none !important;
-  }
+.tech-marquee::before,
+.tech-marquee::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  width: 35px;
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+.tech-marquee::before {
+  left: 0;
+
+  background: linear-gradient(to right, #050507, transparent);
+}
+
+.tech-marquee::after {
+  right: 0;
+
+  background: linear-gradient(to left, #050507, transparent);
 }
 </style>
