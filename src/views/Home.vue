@@ -312,16 +312,8 @@ onBeforeUnmount(() => {
   opacity: 0.75;
 
   background-image:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.9) 0.7px,
-      transparent 1px
-    ),
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.5) 0.5px,
-      transparent 1px
-    );
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.7px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 1px);
 
   background-size:
     80px 80px,
@@ -341,16 +333,8 @@ onBeforeUnmount(() => {
   opacity: 0.55;
 
   background-image:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.9) 1px,
-      transparent 1.5px
-    ),
-    radial-gradient(
-      circle,
-      rgba(180, 210, 255, 0.8) 1px,
-      transparent 1.5px
-    );
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(180, 210, 255, 0.8) 1px, transparent 1.5px);
 
   background-size:
     180px 180px,
@@ -369,13 +353,7 @@ onBeforeUnmount(() => {
 .stars-large {
   opacity: 0.8;
 
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 1) 0,
-      rgba(255, 255, 255, 0.8) 1px,
-      transparent 2px
-    );
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 1) 0, rgba(255, 255, 255, 0.8) 1px, transparent 2px);
 
   background-size: 320px 320px;
 
@@ -483,13 +461,7 @@ onBeforeUnmount(() => {
 
   opacity: 0.3;
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(90, 80, 255, 0.45),
-      rgba(60, 40, 160, 0.15),
-      transparent 70%
-    );
+  background: radial-gradient(ellipse, rgba(90, 80, 255, 0.45), rgba(60, 40, 160, 0.15), transparent 70%);
 
   -webkit-animation: nebula-one 18s ease-in-out infinite alternate;
   animation: nebula-one 18s ease-in-out infinite alternate;
@@ -506,13 +478,7 @@ onBeforeUnmount(() => {
 
   opacity: 0.25;
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(120, 70, 255, 0.3),
-      rgba(40, 80, 180, 0.15),
-      transparent 70%
-    );
+  background: radial-gradient(ellipse, rgba(120, 70, 255, 0.3), rgba(40, 80, 180, 0.15), transparent 70%);
 
   -webkit-animation: nebula-two 22s ease-in-out infinite alternate;
   animation: nebula-two 22s ease-in-out infinite alternate;
@@ -529,13 +495,7 @@ onBeforeUnmount(() => {
 
   opacity: 0.25;
 
-  background:
-    radial-gradient(
-      ellipse,
-      rgba(40, 90, 255, 0.25),
-      rgba(100, 40, 180, 0.12),
-      transparent 70%
-    );
+  background: radial-gradient(ellipse, rgba(40, 90, 255, 0.25), rgba(100, 40, 180, 0.12), transparent 70%);
 
   -webkit-animation: nebula-three 25s ease-in-out infinite alternate;
   animation: nebula-three 25s ease-in-out infinite alternate;
@@ -643,12 +603,7 @@ onBeforeUnmount(() => {
   right: 0;
   top: 0;
 
-  background:
-    linear-gradient(
-      to left,
-      rgba(255, 255, 255, 0.8),
-      transparent
-    );
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
 
   transform-origin: right;
 }
@@ -734,13 +689,7 @@ onBeforeUnmount(() => {
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(120, 120, 255, 0.09) 0%,
-      rgba(90, 80, 220, 0.04) 30%,
-      transparent 70%
-    );
+  background: radial-gradient(circle, rgba(120, 120, 255, 0.09) 0%, rgba(90, 80, 220, 0.04) 30%, transparent 70%);
 
   filter: blur(20px);
 
@@ -761,14 +710,13 @@ onBeforeUnmount(() => {
 
   pointer-events: none;
 
-  background:
-    radial-gradient(
-      circle at center,
-      transparent 0%,
-      rgba(0, 0, 0, 0.1) 40%,
-      rgba(0, 0, 0, 0.6) 80%,
-      #000 100%
-    );
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.6) 80%,
+    #000 100%
+  );
 }
 
 /* =========================================================
@@ -803,15 +751,14 @@ onBeforeUnmount(() => {
 
   border-radius: 9999px;
 
-  background:
-    conic-gradient(
-      from 0deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent,
-      rgba(120, 120, 255, 0.2),
-      transparent
-    );
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent,
+    rgba(120, 120, 255, 0.2),
+    transparent
+  );
 
   filter: blur(10px);
 
@@ -934,23 +881,9 @@ onBeforeUnmount(() => {
   /*
    * Safari clipping
    */
-  -webkit-mask-image:
-    linear-gradient(
-      to right,
-      transparent 0%,
-      #000 5%,
-      #000 95%,
-      transparent 100%
-    );
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
 
-  mask-image:
-    linear-gradient(
-      to right,
-      transparent 0%,
-      #000 5%,
-      #000 95%,
-      transparent 100%
-    );
+  mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
 }
 
 /*
@@ -1052,19 +985,15 @@ onBeforeUnmount(() => {
 */
 
 .tech-track-left {
-  -webkit-animation:
-    marquee-left 30s linear infinite;
+  -webkit-animation: marquee-left 30s linear infinite;
 
-  animation:
-    marquee-left 30s linear infinite;
+  animation: marquee-left 30s linear infinite;
 }
 
 .tech-track-right {
-  -webkit-animation:
-    marquee-right 30s linear infinite;
+  -webkit-animation: marquee-right 30s linear infinite;
 
-  animation:
-    marquee-right 30s linear infinite;
+  animation: marquee-right 30s linear infinite;
 }
 
 /* LEFT */
@@ -1102,7 +1031,7 @@ onBeforeUnmount(() => {
 }
 
 @keyframes marquee-right {
- 0% {
+  0% {
     transform: translate3d(-50%, 0, 0);
   }
 
@@ -1227,14 +1156,13 @@ onBeforeUnmount(() => {
 .aura-dual::before {
   inset: -2px;
 
-  background:
-    linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.2),
-      transparent 35%,
-      transparent 65%,
-      rgba(120, 120, 255, 0.2)
-    );
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.2),
+    transparent 35%,
+    transparent 65%,
+    rgba(120, 120, 255, 0.2)
+  );
 
   filter: blur(6px);
 
@@ -1247,16 +1175,8 @@ onBeforeUnmount(() => {
   inset: -4px;
 
   background:
-    radial-gradient(
-      circle at 20% 50%,
-      rgba(255, 255, 255, 0.12),
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 80% 50%,
-      rgba(100, 100, 255, 0.12),
-      transparent 45%
-    );
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.12), transparent 45%),
+    radial-gradient(circle at 80% 50%, rgba(100, 100, 255, 0.12), transparent 45%);
 
   filter: blur(10px);
 
@@ -1440,996 +1360,6 @@ onBeforeUnmount(() => {
   .go-top-enter-active,
   .go-top-leave-active {
     transition: none;
-  }
-}
-</style>
-/* ================================= */
-/* GALAXY BACKGROUND */
-/* ================================= */
-
-.galaxy-background {
-  background: #010104;
-}
-
-/* ================================= */
-/* STARS */
-/* ================================= */
-
-.stars {
-  position: absolute;
-  inset: -100px;
-  background-repeat: repeat;
-  pointer-events: none;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-}
-
-/* Small Stars */
-
-.stars-small {
-  opacity: 0.75;
-
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.7px, transparent 1px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.5) 0.5px, transparent 1px);
-
-  background-size:
-    80px 80px,
-    130px 130px;
-
-  background-position:
-    10px 20px,
-    50px 70px;
-
-  animation: stars-drift-small 80s linear infinite;
-  -webkit-animation: stars-drift-small 80s linear infinite;
-}
-
-/* Medium Stars */
-
-.stars-medium {
-  opacity: 0.55;
-
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(180, 210, 255, 0.8) 1px, transparent 1.5px);
-
-  background-size:
-    180px 180px,
-    240px 240px;
-
-  background-position:
-    30px 40px,
-    100px 150px;
-
-  animation: stars-drift-medium 120s linear infinite;
-  -webkit-animation: stars-drift-medium 120s linear infinite;
-}
-
-/* Large Stars */
-
-.stars-large {
-  opacity: 0.8;
-
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 1) 0, rgba(255, 255, 255, 0.8) 1px, transparent 2px);
-
-  background-size: 320px 320px;
-
-  animation: stars-twinkle 4s ease-in-out infinite alternate;
-  -webkit-animation: stars-twinkle 4s ease-in-out infinite alternate;
-}
-
-@keyframes stars-drift-small {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(-100px, 80px, 0);
-  }
-}
-
-@-webkit-keyframes stars-drift-small {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(-100px, 80px, 0);
-  }
-}
-
-@keyframes stars-drift-medium {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(150px, -100px, 0);
-  }
-}
-
-@-webkit-keyframes stars-drift-medium {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(150px, -100px, 0);
-  }
-}
-
-@keyframes stars-twinkle {
-  0% {
-    opacity: 0.3;
-  }
-
-  50% {
-    opacity: 0.8;
-  }
-
-  100% {
-    opacity: 0.45;
-  }
-}
-
-/* ================================= */
-/* NEBULA */
-/* ================================= */
-
-.nebula {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-}
-
-/* Top Left */
-
-.nebula-one {
-  width: 700px;
-  height: 500px;
-
-  top: -150px;
-  left: 5%;
-
-  opacity: 0.3;
-
-  background: radial-gradient(ellipse, rgba(90, 80, 255, 0.45), rgba(60, 40, 160, 0.15), transparent 70%);
-
-  animation: nebula-one 18s ease-in-out infinite alternate;
-  -webkit-animation: nebula-one 18s ease-in-out infinite alternate;
-}
-
-/* Right */
-
-.nebula-two {
-  width: 800px;
-  height: 600px;
-
-  right: -200px;
-  top: 25%;
-
-  opacity: 0.25;
-
-  background: radial-gradient(ellipse, rgba(120, 70, 255, 0.3), rgba(40, 80, 180, 0.15), transparent 70%);
-
-  animation: nebula-two 22s ease-in-out infinite alternate;
-  -webkit-animation: nebula-two 22s ease-in-out infinite alternate;
-}
-
-/* Bottom */
-
-.nebula-three {
-  width: 900px;
-  height: 500px;
-
-  left: 20%;
-  bottom: -250px;
-
-  opacity: 0.25;
-
-  background: radial-gradient(ellipse, rgba(40, 90, 255, 0.25), rgba(100, 40, 180, 0.12), transparent 70%);
-
-  animation: nebula-three 25s ease-in-out infinite alternate;
-  -webkit-animation: nebula-three 25s ease-in-out infinite alternate;
-}
-
-@keyframes nebula-one {
-  from {
-    transform: translate3d(-50px, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(100px, 80px, 0) scale(1.25);
-  }
-}
-
-@keyframes nebula-two {
-  from {
-    transform: translate3d(50px, -30px, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(-100px, 100px, 0) scale(1.3);
-  }
-}
-
-@keyframes nebula-three {
-  from {
-    transform: translate3d(0, 30px, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(80px, -80px, 0) scale(1.25);
-  }
-}
-
-/* ================================= */
-/* SHOOTING STARS */
-/* ================================= */
-
-.shooting-star {
-  position: absolute;
-
-  width: 2px;
-  height: 2px;
-
-  border-radius: 50%;
-
-  background: white;
-
-  box-shadow:
-    0 0 6px white,
-    0 0 15px rgba(150, 170, 255, 0.9);
-
-  opacity: 0;
-
-  will-change: transform, opacity;
-  transform: translate3d(0, 0, 0) rotate(-35deg);
-  -webkit-transform: translate3d(0, 0, 0) rotate(-35deg);
-
-  animation: shooting-star 7s linear infinite;
-  -webkit-animation: shooting-star 7s linear infinite;
-}
-
-.shooting-star::after {
-  content: "";
-
-  position: absolute;
-
-  width: 120px;
-  height: 1px;
-
-  right: 0;
-  top: 0;
-
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.8), transparent);
-
-  transform-origin: right;
-}
-
-.shooting-star-1 {
-  top: 15%;
-  left: 70%;
-
-  animation-delay: 2s;
-  -webkit-animation-delay: 2s;
-}
-
-.shooting-star-2 {
-  top: 35%;
-  left: 20%;
-
-  animation-delay: 5s;
-  -webkit-animation-delay: 5s;
-}
-
-.shooting-star-3 {
-  top: 60%;
-  left: 80%;
-
-  animation-delay: 8s;
-  -webkit-animation-delay: 8s;
-}
-
-@keyframes shooting-star {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(-35deg);
-  }
-
-  5% {
-    opacity: 1;
-  }
-
-  15% {
-    opacity: 0;
-    transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-}
-
-@-webkit-keyframes shooting-star {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 0, 0) rotate(-35deg);
-  }
-
-  5% {
-    opacity: 1;
-  }
-
-  15% {
-    opacity: 0;
-    -webkit-transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: translate3d(-400px, 250px, 0) rotate(-35deg);
-  }
-}
-
-/* ================================= */
-/* MOUSE COSMIC GLOW */
-/* ================================= */
-
-.cosmic-cursor {
-  position: absolute;
-
-  width: 500px;
-  height: 500px;
-
-  transform: translate3d(-50%, -50%, 0);
-  -webkit-transform: translate3d(-50%, -50%, 0);
-
-  border-radius: 50%;
-
-  background: radial-gradient(circle, rgba(120, 120, 255, 0.09) 0%, rgba(90, 80, 220, 0.04) 30%, transparent 70%);
-
-  filter: blur(20px);
-
-  transition:
-    left 0.35s ease-out,
-    top 0.35s ease-out;
-
-  mix-blend-mode: screen;
-}
-
-/* ================================= */
-/* VIGNETTE */
-/* ================================= */
-
-.galaxy-vignette {
-  position: absolute;
-  inset: 0;
-
-  background: radial-gradient(
-    circle at center,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 40%,
-    rgba(0, 0, 0, 0.6) 80%,
-    #000 100%
-  );
-}
-
-/* ================================= */
-/* PROFILE */
-/* ================================= */
-
-.profile-wrapper {
-  box-shadow:
-    0 0 50px rgba(255, 255, 255, 0.08),
-    0 0 100px rgba(100, 100, 255, 0.08);
-
-  transition:
-    transform 0.5s ease,
-    box-shadow 0.5s ease;
-
-  will-change: transform;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.profile-wrapper:hover {
-  transform: scale(1.03);
-  -webkit-transform: scale(1.03);
-
-  box-shadow:
-    0 0 60px rgba(255, 255, 255, 0.15),
-    0 0 120px rgba(100, 100, 255, 0.15);
-}
-
-.profile-glow {
-  position: absolute;
-  inset: -20px;
-
-  border-radius: 9999px;
-
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent,
-    rgba(120, 120, 255, 0.2),
-    transparent
-  );
-
-  filter: blur(10px);
-
-  will-change: transform;
-
-  animation: profile-spin 8s linear infinite;
-  -webkit-animation: profile-spin 8s linear infinite;
-}
-
-@keyframes profile-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes profile-spin {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-/* ================================= */
-/* NAVIGATION */
-/* ================================= */
-
-.nav-button {
-  position: relative;
-}
-
-.nav-button::after {
-  content: "";
-
-  position: absolute;
-
-  left: 50%;
-  bottom: -6px;
-
-  width: 0;
-  height: 1px;
-
-  background: white;
-
-  transform: translate3d(-50%, 0, 0);
-  -webkit-transform: translate3d(-50%, 0, 0);
-
-  transition: width 0.3s ease;
-}
-
-.nav-button:hover::after {
-  width: 100%;
-}
-
-/* ================================= */
-/* CONTENT */
-/* ================================= */
-
-.section-content {
-  animation: section-enter 0.45s ease;
-  -webkit-animation: section-enter 0.45s ease;
-}
-
-@keyframes section-enter {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 12px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes section-enter {
-  from {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 12px, 0);
-  }
-
-  to {
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ================================= */
-/* TECH MARQUEE */
-/* ================================= */
-
-.tech-marquee {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-
-  /*
-   * Safari / iOS fix
-   */
-  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-
-  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-}
-
-.tech-track {
-  display: flex;
-  width: max-content;
-  align-items: center;
-  gap: 28px;
-
-  flex-shrink: 0;
-
-  /*
-   * IMPORTANT FOR SAFARI / IOS
-   */
-  will-change: transform;
-
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-}
-
-.tech-item {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 7px;
-
-  white-space: nowrap;
-
-  font-size: 13px;
-  color: #6b7280;
-
-  /*
-   * Force Safari into GPU layer
-   */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.tech-item img {
-  display: block;
-  flex-shrink: 0;
-
-  width: 20px;
-  height: 20px;
-
-  object-fit: contain;
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-.tech-item:hover {
-  color: #fff;
-
-  transform: translate3d(0, -1px, 0);
-  -webkit-transform: translate3d(0, -1px, 0);
-}
-
-/* ================================= */
-/* LEFT MARQUEE */
-/* ================================= */
-
-.tech-track-left {
-  animation: marquee-left 35s linear infinite;
-  -webkit-animation: marquee-left 35s linear infinite;
-}
-
-/* ================================= */
-/* RIGHT MARQUEE */
-/* ================================= */
-
-.tech-track-right {
-  animation: marquee-right 35s linear infinite;
-  -webkit-animation: marquee-right 35s linear infinite;
-}
-
-/* ================================= */
-/* MARQUEE ANIMATION */
-/* ================================= */
-
-@keyframes marquee-left {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@-webkit-keyframes marquee-left {
-  from {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes marquee-right {
-  from {
-    transform: translate3d(-50%, 0, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes marquee-right {
-  from {
-    -webkit-transform: translate3d(-50%, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-}
-
-/* ================================= */
-/* PAUSE ON DESKTOP HOVER */
-/* ================================= */
-
-.tech-marquee:hover .tech-track {
-  animation-play-state: paused;
-  -webkit-animation-play-state: paused;
-}
-
-/* ================================= */
-/* GO TO TOP BUTTON */
-/* ================================= */
-
-.go-top-button {
-  box-shadow:
-    0 0 20px rgba(255, 255, 255, 0.05),
-    0 0 40px rgba(100, 100, 255, 0.04);
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-.go-top-button:hover {
-  box-shadow:
-    0 0 25px rgba(255, 255, 255, 0.1),
-    0 0 50px rgba(100, 100, 255, 0.08);
-}
-
-/* Go Top Animation */
-
-.go-top-enter-active,
-.go-top-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.go-top-enter-from,
-.go-top-leave-to {
-  opacity: 0;
-
-  transform: translate3d(0, 15px, 0) scale(0.9);
-  -webkit-transform: translate3d(0, 15px, 0) scale(0.9);
-}
-
-/* ================================= */
-/* MOBILE */
-/* ================================= */
-
-@media (max-width: 640px) {
-  .nebula-one,
-  .nebula-two,
-  .nebula-three {
-    filter: blur(80px);
-    opacity: 0.18;
-  }
-
-  .cosmic-cursor {
-    display: none;
-  }
-
-  .shooting-star {
-    animation-duration: 9s;
-    -webkit-animation-duration: 9s;
-  }
-
-  .tech-track {
-    gap: 20px;
-  }
-
-  .tech-item {
-    font-size: 12px;
-  }
-
-  .tech-item img {
-    width: 18px;
-    height: 18px;
-  }
-
-  .tech-track-left {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
-  }
-
-  .tech-track-right {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
-  }
-
-  .go-top-button {
-    right: 20px;
-    bottom: 20px;
-  }
-
-  .profile-gallery {
-    width: 160px;
-    height: 160px;
-  }
-}
-
-/* ================================= */
-/* IOS SAFARI */
-/* ================================= */
-
-@supports (-webkit-touch-callout: none) {
-  .tech-marquee {
-    overflow: hidden;
-
-    /*
-     * Prevent Safari from treating the
-     * animated content as a normal layout.
-     */
-    contain: layout paint;
-  }
-
-  .tech-track {
-    display: flex;
-    width: max-content;
-
-    will-change: transform;
-
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .tech-track-left {
-    animation: marquee-left-ios 35s linear infinite;
-    -webkit-animation: marquee-left-ios 35s linear infinite;
-  }
-
-  .tech-track-right {
-    animation: marquee-right-ios 35s linear infinite;
-    -webkit-animation: marquee-right-ios 35s linear infinite;
-  }
-
-  @keyframes marquee-left-ios {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-left-ios {
-    from {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @keyframes marquee-right-ios {
-    from {
-      transform: translate3d(-50%, 0, 0);
-    }
-
-    to {
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-right-ios {
-    from {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-
-    to {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-  }
-}
-
-/* ================================= */
-/* REDUCE MOTION */
-/* ================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .stars,
-  .nebula,
-  .shooting-star,
-  .profile-glow,
-  .tech-track {
-    animation: none !important;
-    -webkit-animation: none !important;
-  }
-
-  .cosmic-cursor {
-    transition: none;
-  }
-
-  .go-top-enter-active,
-  .go-top-leave-active {
-    transition: none;
-  }
-}
-
-/* ================================= */
-/* CIRCULAR PROFILE HOVER GALLERY */
-/* ================================= */
-
-.profile-gallery {
-  width: 224px;
-  height: 224px;
-
-  border-radius: 9999px;
-  overflow: hidden;
-
-  /*
-   * Safari / iOS rendering
-   */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.profile-gallery img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  border-radius: 9999px;
-
-  display: block;
-
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
-@media (max-width: 640px) {
-  .profile-gallery {
-    width: 160px;
-    height: 160px;
-  }
-}
-
-/* ================================= */
-/* AURA BUTTON */
-/* ================================= */
-
-.aura {
-  position: relative;
-  display: inline-flex;
-  isolation: isolate;
-}
-
-.aura::before,
-.aura::after {
-  content: "";
-
-  position: absolute;
-
-  z-index: -1;
-
-  border-radius: 12px;
-
-  pointer-events: none;
-}
-
-.aura-dual::before {
-  inset: -2px;
-
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.2),
-    transparent 35%,
-    transparent 65%,
-    rgba(120, 120, 255, 0.2)
-  );
-
-  filter: blur(6px);
-
-  opacity: 0.5;
-
-  transition: opacity 0.3s ease;
-}
-
-.aura-dual::after {
-  inset: -4px;
-
-  background:
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.12), transparent 45%),
-    radial-gradient(circle at 80% 50%, rgba(100, 100, 255, 0.12), transparent 45%);
-
-  filter: blur(10px);
-
-  opacity: 0.3;
-
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.aura-dual:hover::before {
-  opacity: 0.8;
-}
-
-.aura-dual:hover::after {
-  opacity: 0.5;
-
-  transform: scale(1.04);
-}
-
-/* ================================= */
-/* SAFARI GPU OPTIMIZATION */
-/* ================================= */
-
-@supports (-webkit-touch-callout: none) {
-  .shooting-star,
-  .stars,
-  .nebula,
-  .profile-glow,
-  .tech-track {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
-    -webkit-perspective: 1000px;
-    perspective: 1000px;
-
-    will-change: transform;
   }
 }
 </style>
