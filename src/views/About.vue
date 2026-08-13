@@ -243,6 +243,7 @@ const initializeMarquees = () => {
       position: isRight ? -halfWidth : 0,
       direction: isRight ? 1 : -1,
       width: halfWidth,
+      paused: false,
     });
 
     const initialTransform = `translate3d(${isRight ? -halfWidth : 0}px, 0, 0)`;
@@ -289,7 +290,7 @@ const animateMarquees = (timestamp) => {
   const speed = 35;
 
   marqueeStates.forEach((state) => {
-    if (!state.element) {
+    if (!state.element || state.paused) {
       return;
     }
 
@@ -417,7 +418,11 @@ onBeforeUnmount(() => {
 
       <div class="space-y-3">
         <!-- FIRST ROW -->
-        <div class="tech-marquee">
+        <div
+          class="tech-marquee"
+          @mouseenter="marqueeStates[0] && (marqueeStates[0].paused = true)"
+          @mouseleave="marqueeStates[0] && (marqueeStates[0].paused = false)"
+        >
           <div class="tech-track">
             <!-- Original -->
             <div v-for="tech in techStack" :key="`about-tech-1-${tech.name}`" class="tech-item">
@@ -440,7 +445,11 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- SECOND ROW -->
-        <div class="tech-marquee">
+        <div
+          class="tech-marquee"
+          @mouseenter="marqueeStates[1] && (marqueeStates[1].paused = true)"
+          @mouseleave="marqueeStates[1] && (marqueeStates[1].paused = false)"
+        >
           <div class="tech-track">
             <!-- Reversed -->
             <div v-for="tech in [...techStack].reverse()" :key="`about-tech-2-${tech.name}`" class="tech-item">
@@ -473,7 +482,11 @@ onBeforeUnmount(() => {
 
       <div class="space-y-3">
         <!-- FIRST ROW -->
-        <div class="tech-marquee">
+        <div
+          class="tech-marquee"
+          @mouseenter="marqueeStates[2] && (marqueeStates[2].paused = true)"
+          @mouseleave="marqueeStates[2] && (marqueeStates[2].paused = false)"
+        >
           <div class="tech-track">
             <!-- Original -->
             <div v-for="tool in developmentTools" :key="`tools-1-${tool.name}`" class="tech-item">
@@ -496,7 +509,11 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- SECOND ROW -->
-        <div class="tech-marquee">
+        <div
+          class="tech-marquee"
+          @mouseenter="marqueeStates[3] && (marqueeStates[3].paused = true)"
+          @mouseleave="marqueeStates[3] && (marqueeStates[3].paused = false)"
+        >
           <div class="tech-track">
             <!-- Reversed -->
             <div v-for="tool in [...developmentTools].reverse()" :key="`tools-2-${tool.name}`" class="tech-item">
@@ -883,5 +900,39 @@ onBeforeUnmount(() => {
   right: 0;
 
   background: linear-gradient(to left, #050507, transparent);
+}
+
+.tech-item {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 7px;
+  white-space: nowrap;
+
+  font-size: 13px;
+  line-height: 1;
+  color: #6b7280;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.tech-item:hover {
+  color: #ffffff;
+  transform: translateZ(0) scale(1.05);
+}
+
+.tech-item:hover img {
+  filter: brightness(1.2);
 }
 </style>
