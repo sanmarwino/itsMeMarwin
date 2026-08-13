@@ -548,50 +548,74 @@ const Projects = ref([
 </template>
 
 <style scoped>
-/*
-|--------------------------------------------------------------------------
-| TECH MARQUEE
-|--------------------------------------------------------------------------
-*/
+/* =========================================
+   TECH / TOOLS MARQUEE
+========================================= */
 
 .tech-marquee {
   position: relative;
   width: 100%;
   overflow: hidden;
-
-  /* Safari */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-
-  /* Prevent Safari layout issues */
-  contain: layout paint;
 }
+
+/* Fade edges */
+.tech-marquee::before,
+.tech-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tech-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--fade-bg, #050507), transparent);
+}
+
+.tech-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--fade-bg, #050507), transparent);
+}
+
+/* =========================================
+   TRACK
+========================================= */
 
 .tech-track {
   display: flex;
-  width: max-content;
   align-items: center;
+
+  width: max-content;
+  flex-wrap: nowrap;
+
   gap: 28px;
 
-  flex-shrink: 0;
+  /* Important for iOS */
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
 
-  /* Force GPU layer */
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
 
-  will-change: transform;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
+
+/* =========================================
+   ITEMS
+========================================= */
 
 .tech-item {
   display: flex;
-  flex-shrink: 0;
   align-items: center;
+  flex-shrink: 0;
+
   gap: 7px;
 
   white-space: nowrap;
@@ -601,16 +625,11 @@ const Projects = ref([
 
   color: #6b7280;
 
-  /* Safari GPU */
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 
-  backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+  backface-visibility: hidden;
 }
 
 .tech-item img {
@@ -623,123 +642,98 @@ const Projects = ref([
 
   object-fit: contain;
 
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
-.tech-item:hover {
-  color: #fff;
-
-  transform: translate3d(0, -1px, 0);
-  -webkit-transform: translate3d(0, -1px, 0);
-}
-
-/*
-|--------------------------------------------------------------------------
-| LEFT MARQUEE
-|--------------------------------------------------------------------------
-*/
+/* =========================================
+   LEFT
+========================================= */
 
 .tech-track-left {
-  animation: marquee-left 35s linear infinite;
-  -webkit-animation: marquee-left 35s linear infinite;
+  -webkit-animation: marquee-left 30s linear infinite;
+  animation: marquee-left 30s linear infinite;
 }
 
-/*
-|--------------------------------------------------------------------------
-| RIGHT MARQUEE
-|--------------------------------------------------------------------------
-*/
+/* =========================================
+   RIGHT
+========================================= */
 
 .tech-track-right {
-  animation: marquee-right 35s linear infinite;
-  -webkit-animation: marquee-right 35s linear infinite;
+  -webkit-animation: marquee-right 30s linear infinite;
+  animation: marquee-right 30s linear infinite;
 }
 
-/*
-|--------------------------------------------------------------------------
-| LEFT ANIMATION
-|--------------------------------------------------------------------------
-*/
-
-@keyframes marquee-left {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
+/* =========================================
+   ANIMATION
+========================================= */
 
 @-webkit-keyframes marquee-left {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0);
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 
-  100% {
-    -webkit-transform: translate3d(-50%, 0, 0);
+  to {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| RIGHT ANIMATION
-|--------------------------------------------------------------------------
-*/
-
-@keyframes marquee-right {
-  0% {
-    transform: translate3d(-50%, 0, 0);
+@keyframes marquee-left {
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 
-  100% {
-    transform: translate3d(0, 0, 0);
+  to {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 }
 
 @-webkit-keyframes marquee-right {
-  0% {
-    -webkit-transform: translate3d(-50%, 0, 0);
+  from {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 
-  100% {
-    -webkit-transform: translate3d(0, 0, 0);
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| DESKTOP HOVER
-|--------------------------------------------------------------------------
-*/
+@keyframes marquee-right {
+  from {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
 
-.tech-marquee:hover .tech-track {
-  animation-play-state: paused;
-  -webkit-animation-play-state: paused;
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
 }
 
-/*
-|--------------------------------------------------------------------------
-| MOBILE
-|--------------------------------------------------------------------------
-*/
+/* =========================================
+   DESKTOP HOVER
+========================================= */
+
+@media (hover: hover) and (pointer: fine) {
+  .tech-marquee:hover .tech-track {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 640px) {
-  .tech-marquee {
-    overflow: hidden;
-  }
-
   .tech-track {
     gap: 20px;
-
-    will-change: transform;
-
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
   }
 
   .tech-item {
@@ -752,99 +746,26 @@ const Projects = ref([
   }
 
   .tech-track-left {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
+    -webkit-animation-duration: 25s;
+    animation-duration: 25s;
   }
 
   .tech-track-right {
-    animation-duration: 30s;
-    -webkit-animation-duration: 30s;
+    -webkit-animation-duration: 25s;
+    animation-duration: 25s;
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| IOS SAFARI
-|--------------------------------------------------------------------------
-*/
+/* =========================================
+   REDUCED MOTION
+========================================= */
 
-@supports (-webkit-touch-callout: none) {
-  .tech-marquee {
-    overflow: hidden;
-
-    contain: layout paint;
-
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-
-    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-  }
-
+@media (prefers-reduced-motion: reduce) {
   .tech-track {
-    display: flex;
-    width: max-content;
-
-    flex-shrink: 0;
-
-    will-change: transform;
-
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    perspective: 1000px;
-    -webkit-perspective: 1000px;
-  }
-
-  .tech-track-left {
-    animation: marquee-left-ios 35s linear infinite;
-    -webkit-animation: marquee-left-ios 35s linear infinite;
-  }
-
-  .tech-track-right {
-    animation: marquee-right-ios 35s linear infinite;
-    -webkit-animation: marquee-right-ios 35s linear infinite;
-  }
-
-  @keyframes marquee-left-ios {
-    0% {
-      transform: translate3d(0, 0, 0);
-    }
-
-    100% {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-left-ios {
-    0% {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-
-    100% {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @keyframes marquee-right-ios {
-    0% {
-      transform: translate3d(-50%, 0, 0);
-    }
-
-    100% {
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @-webkit-keyframes marquee-right-ios {
-    0% {
-      -webkit-transform: translate3d(-50%, 0, 0);
-    }
-
-    100% {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
+    -webkit-animation: none !important;
+    animation: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
   }
 }
 </style>
