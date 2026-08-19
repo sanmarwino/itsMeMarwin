@@ -134,7 +134,7 @@ const closeCertificate = () => {
       <div
         v-for="achievement in achievements"
         :key="achievement.id"
-        @click="openCertificate(achievement)"
+        @click="achievement.file && openCertificate(achievement)"
         class="group cursor-pointer rounded-2xl border border-white/10 bg-white/[0.025] p-5 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04] sm:p-6"
       >
         <div class="flex items-center gap-4">
