@@ -455,7 +455,7 @@ onBeforeUnmount(() => {
     <!-- MAIN -->
     <!-- ================================= -->
 
-    <main class="relative z-10 mx-auto max-w-5xl px-5 sm:px-6">
+    <main class="relative z-10 mx-auto max-w-6xl px-5 sm:px-6">
       <!-- ================================= -->
       <!-- HERO -->
       <!-- ================================= -->
